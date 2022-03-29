@@ -70,8 +70,15 @@ function MQTTconnect() {
     mqtt.connect(options);
     return false;
 
-
 }
+
+function MQTTdisconnect() {
+    mqtt.disconnect();
+    return false;
+}
+
+
+
 function sub_topics() {
     document.getElementById("messages").innerHTML = "";
     if (connected_flag == 0) {
