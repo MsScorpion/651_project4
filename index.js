@@ -74,6 +74,8 @@ function MQTTconnect() {
 
 function MQTTdisconnect() {
     mqtt.disconnect();
+    document.getElementById("messages").innerHTML = "Connection Status: Disconnected Successfully";
+    document.getElementById("status").innerHTML = "Connection Status: Disconnected Successfully";
     return false;
 }
 
