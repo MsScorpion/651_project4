@@ -202,6 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         marker = L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap);
+        map.removeLayer(marker);
         marker.bindPopup(msg).openPopup();
         marker.closePopup();
 
