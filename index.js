@@ -1,8 +1,9 @@
-// document.addEventListener("DOMContentLoaded", function () {
-    var connected_flag = 0
-    var mqtt;
-    var reconnectTimeout = 2000;
-    //var geoLonLat;
+//MQTT Operations
+var connected_flag = 0
+var mqtt;
+var reconnectTimeout = 2000;
+
+//var geoLonLat;
 function onConnectionLost() {
     console.log("connection lost");
     document.getElementById("status").innerHTML = "Connection Lost";
