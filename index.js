@@ -1,8 +1,8 @@
 //MQTT Operations
 var connected_flag = 0
-var mqtt;
+var mqtt = "";
 var reconnectTimeout = 2000;
-
+var map;
 //var geoLonLat;
 function onConnectionLost() {
     console.log("connection lost");
@@ -19,6 +19,19 @@ function onMessageArrived(r_message) {
     out_msg = "Message received " + r_message.payloadString + "<br>";
     out_msg = out_msg + "Message received Topic " + r_message.destinationName;
     //console.log("Message received ",r_message.payloadString);
+    try{
+        var obj = JSON.parse(r_message.payloadString);
+        latitude = obj.latitude;
+        longitude = obj.longitude;
+        mymap.panTo(new L.LatLng(latitude, longitude));
+        var marker = L.marker([latitude, longitude]).addTo(mymap);
+        marker.bindPopup(r_message.payloadString).openPopup();
+        marker.closePopup();
+    }
+    catch(e){
+        console.log("Error in parsing JSON");
+    }
+
     console.log(out_msg);
     document.getElementById("messages").innerHTML = out_msg;
 }
@@ -94,6 +107,7 @@ function sub_topics() {
     //var stopic = document.forms["subs"]["Stopic"].value;
     console.log("Subscribing to topic =" + stopic);
     mqtt.subscribe(stopic);
+    document.getElementById("messages").innerHTML = "Subscribed to topic " + stopic;
     return false;
 }
 function send_message() {
@@ -117,6 +131,8 @@ function send_message() {
     else
         message.destinationName = topic;
     mqtt.send(message);
+    // mymap.panTo([latitude, longitude]);
+    // marker = L.marker([latitude, longitude]).addTo(mymap);
     //mqtt.send(latitude, longitude);
     return false;
 }
@@ -136,7 +152,7 @@ function send_message() {
 //   }
 
 document.addEventListener("DOMContentLoaded", function () {
-    var mymap = L.map('mapid', {
+    mymap = L.map('mapid', {
         center: [50.5, 30.5],
         zoom: 13
     });
@@ -172,7 +188,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // });
         mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
 
-
         if (temperature >=-40 && temperature < 10)
             myIcon = new L.icon({
                 iconUrl: 'img/marker-icon-2x-blue.png',
@@ -202,7 +217,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         marker = L.marker([latitude, longitude], {icon: myIcon}).addTo(mymap);
-        map.removeLayer(marker);
         marker.bindPopup(msg).openPopup();
         marker.closePopup();
 
@@ -213,9 +227,6 @@ document.addEventListener("DOMContentLoaded", function () {
         else
             message.destinationName = topic;
         mqtt.send(message);
-        // console.log(msg);
-        // console.log(message);
-        // console.log(temperature)
       }
   
       function error() {
