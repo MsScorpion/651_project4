@@ -36,7 +36,7 @@ function onMessageArrived(r_message) {
     document.getElementById("messages").innerHTML = out_msg;
 }
 function onConnected(recon, url) {
-    console.log(" in onConnected " + reconn);
+    console.log(" in onConnected " + recon);
 }
 function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
